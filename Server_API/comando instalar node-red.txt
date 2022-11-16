@@ -1,0 +1,2 @@
+Instalar node-red: npm install -g --unsafe-perm node-red
+Iniciar node-red: node-red

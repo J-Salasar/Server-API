@@ -1,0 +1,1067 @@
+[
+    {
+        "id": "268f82aae9dd4f6c",
+        "type": "inject",
+        "z": "2c1321d5e1797f34",
+        "name": "Start",
+        "props": [
+            {
+                "p": "payload"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "payload": "",
+        "payloadType": "str",
+        "x": 110,
+        "y": 320,
+        "wires": [
+            [
+                "7160cbd0fb3e6bdb"
+            ]
+        ]
+    },
+    {
+        "id": "2014eeae2550908b",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Turno",
+        "func": "msg.topic =\"SELECT `pase` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 410,
+        "y": 300,
+        "wires": [
+            [
+                "2a1b5e49b2bfab49"
+            ]
+        ]
+    },
+    {
+        "id": "2a1b5e49b2bfab49",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Llegada",
+        "x": 540,
+        "y": 300,
+        "wires": [
+            [
+                "d6fcccb58c2f9d4c"
+            ]
+        ]
+    },
+    {
+        "id": "838557e08b29c4f4",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Mensaje",
+        "func": "var consulta=new Object();\nvar correo,user,code;\nconsulta=msg.payload;\nif(msg.payload.length !=0){\n    correo=consulta[0].correo;\n    user=consulta[0].user;\n    code=consulta[0].code;\n    msg.to=correo;\n    msg.topic=\"Verificacion de cuenta\"\n    msg.payload=\"Gracias por registrarte en [Proyecto]\\n\"+\n        \"Por favor, valida que este correo es tuyo al hacer click en el enlace.\\n\\n\"+\n        \"==> http://apk.salasar.xyz/verificar.php?usuario=\"+user+\"&codigo=\"+code+\" <==\\n\\n\"+\n        \"[Nota]>> No compartar este link con nadie, nunca te pediremos este link por:\\n\"+\n        \"llamadas, mensajes(SMS) o correo, evita ser victima de fraude.\\n\\n\"+\n        \"Si no reconeces este correo ignoralo por favor.\";\n    return msg;\n}\nmsg.payload = \"0\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1540,
+        "y": 100,
+        "wires": [
+            [
+                "5e589a8196034f35"
+            ]
+        ]
+    },
+    {
+        "id": "7160cbd0fb3e6bdb",
+        "type": "trigger",
+        "z": "2c1321d5e1797f34",
+        "name": "Ejecutador",
+        "op1": "1",
+        "op2": "0",
+        "op1type": "str",
+        "op2type": "str",
+        "duration": "-5",
+        "extend": false,
+        "overrideDelay": false,
+        "units": "s",
+        "reset": "",
+        "bytopic": "all",
+        "topic": "topic",
+        "outputs": 1,
+        "x": 270,
+        "y": 300,
+        "wires": [
+            [
+                "2014eeae2550908b"
+            ]
+        ]
+    },
+    {
+        "id": "f5a7747e7d6f9aad",
+        "type": "e-mail",
+        "z": "2c1321d5e1797f34",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": true,
+        "name": "",
+        "dname": "Correo Verificacion",
+        "x": 1870,
+        "y": 60,
+        "wires": []
+    },
+    {
+        "id": "d53d212f199f7255",
+        "type": "inject",
+        "z": "2c1321d5e1797f34",
+        "name": "Stop",
+        "props": [
+            {
+                "p": "reset",
+                "v": "set",
+                "vt": "str"
+            },
+            {
+                "p": "topic",
+                "vt": "str"
+            }
+        ],
+        "repeat": "",
+        "crontab": "",
+        "once": false,
+        "onceDelay": 0.1,
+        "topic": "",
+        "x": 110,
+        "y": 280,
+        "wires": [
+            [
+                "7160cbd0fb3e6bdb"
+            ]
+        ]
+    },
+    {
+        "id": "d6fcccb58c2f9d4c",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Camino",
+        "func": "var numero=msg.payload[0].pase;\nmsg.payload=numero;\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 680,
+        "y": 300,
+        "wires": [
+            [
+                "baead3a0c49ac025"
+            ]
+        ]
+    },
+    {
+        "id": "df6a632051ba1d6f",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Datos",
+        "x": 1410,
+        "y": 100,
+        "wires": [
+            [
+                "838557e08b29c4f4"
+            ]
+        ]
+    },
+    {
+        "id": "24ceea0d7ed76c16",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Llegada ejecutada",
+        "x": 2050,
+        "y": 120,
+        "wires": [
+            [
+                "f437be91e1a04557",
+                "75a8a931c4539520"
+            ]
+        ]
+    },
+    {
+        "id": "e77cffd4e1b8d078",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Llegada anterior",
+        "func": "msg.topic = \"SELECT `turno`, `pase` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1860,
+        "y": 120,
+        "wires": [
+            [
+                "24ceea0d7ed76c16"
+            ]
+        ]
+    },
+    {
+        "id": "f437be91e1a04557",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Editar",
+        "func": "var numero=msg.payload[0].turno;\nvar camino=msg.payload[0].pase;\nnumero++;\ncamino=2;\nmsg.topic =\"UPDATE `llegada` SET `id`='1', `turno`='\"+numero+\"', `pase`='\"+camino+\"' WHERE (id='1')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2210,
+        "y": 80,
+        "wires": [
+            [
+                "056478f1aa075fcf"
+            ]
+        ]
+    },
+    {
+        "id": "056478f1aa075fcf",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Editar dato",
+        "x": 2410,
+        "y": 80,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "75a8a931c4539520",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Dato a eliminar",
+        "func": "var numero = msg.payload[0].turno;\nmsg.topic = \"DELETE FROM `codigo` WHERE (id='\"+numero+\"')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2240,
+        "y": 120,
+        "wires": [
+            [
+                "45792ffe38220a17"
+            ]
+        ]
+    },
+    {
+        "id": "45792ffe38220a17",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Eliminar",
+        "x": 2500,
+        "y": 120,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "baead3a0c49ac025",
+        "type": "switch",
+        "z": "2c1321d5e1797f34",
+        "name": "switch P",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "eq",
+                "v": "1",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "2",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "3",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 3,
+        "x": 820,
+        "y": 300,
+        "wires": [
+            [
+                "8f986657f485917d"
+            ],
+            [
+                "769309135910183b"
+            ],
+            [
+                "e41cbf9810c0aa6f"
+            ]
+        ]
+    },
+    {
+        "id": "fad73743cd932782",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Consulta",
+        "func": "var numero = msg.payload[0].turno;\nmsg.topic =\"SELECT `correo`, `user`, `code` FROM `codigo` WHERE (`id`= '\"+numero+\"') AND (`pase` = '1')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1280,
+        "y": 100,
+        "wires": [
+            [
+                "df6a632051ba1d6f"
+            ]
+        ]
+    },
+    {
+        "id": "5e589a8196034f35",
+        "type": "switch",
+        "z": "2c1321d5e1797f34",
+        "name": "",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1670,
+        "y": 100,
+        "wires": [
+            [
+                "e77cffd4e1b8d078",
+                "f5a7747e7d6f9aad"
+            ],
+            [
+                "042cc69feb689d5f"
+            ]
+        ]
+    },
+    {
+        "id": "042cc69feb689d5f",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Alternativo",
+        "func": "msg.topic = \"SELECT `pase` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1850,
+        "y": 180,
+        "wires": [
+            [
+                "deddd20ee3606b68"
+            ]
+        ]
+    },
+    {
+        "id": "deddd20ee3606b68",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Ruta",
+        "x": 1990,
+        "y": 180,
+        "wires": [
+            [
+                "350e4ae57d13abfa"
+            ]
+        ]
+    },
+    {
+        "id": "ac1af316d968b13b",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Modificar",
+        "x": 2300,
+        "y": 180,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "350e4ae57d13abfa",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Proximo camino",
+        "func": "var camino = msg.payload[0].pase;\ncamino = 2;\nmsg.topic = \"UPDATE `llegada` SET `id`='1', `pase`='\" + camino + \"' WHERE (id='1')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2140,
+        "y": 180,
+        "wires": [
+            [
+                "ac1af316d968b13b"
+            ]
+        ]
+    },
+    {
+        "id": "836630a1b03d5811",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Mensaje 2",
+        "func": "var consulta=new Object();\nvar correo,codigo;\nconsulta=msg.payload;\nif(msg.payload.length !=0){\n    correo=consulta[0].correo;\n    codigo=consulta[0].code;\n    msg.to=correo;\n    msg.topic=\"Recuperacion de Usuario\"\n    msg.payload=\"Codigo: \"+codigo+\"\\n\\n\"+\n    \"Te enviamos este correo con un codigo de verificacion de tu\\n\"+\n    \"Cuenta: [Proyecto]\\n\"+\n    \"Porque solicitastes recuperar el usuario\";\n    return msg;\n}\nmsg.payload = \"0\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 300,
+        "wires": [
+            [
+                "21f21c9249e0ca53"
+            ]
+        ]
+    },
+    {
+        "id": "9325b781348cfde6",
+        "type": "e-mail",
+        "z": "2c1321d5e1797f34",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": true,
+        "name": "",
+        "dname": "Correo Recuperacion",
+        "x": 1960,
+        "y": 260,
+        "wires": []
+    },
+    {
+        "id": "58becb55dae3754c",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Datos 2",
+        "x": 1440,
+        "y": 300,
+        "wires": [
+            [
+                "836630a1b03d5811"
+            ]
+        ]
+    },
+    {
+        "id": "db792774084ed736",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Llegada ejecutada 2",
+        "x": 2160,
+        "y": 320,
+        "wires": [
+            [
+                "12d7d879e1dd3eb1",
+                "8e44f0b64b99efef"
+            ]
+        ]
+    },
+    {
+        "id": "d37c05a953162ee9",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Llegada anterior 2",
+        "func": "msg.topic = \"SELECT `turno`, `pase` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1950,
+        "y": 320,
+        "wires": [
+            [
+                "db792774084ed736"
+            ]
+        ]
+    },
+    {
+        "id": "12d7d879e1dd3eb1",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Editar 2",
+        "func": "var numero=msg.payload[0].turno;\nvar camino=msg.payload[0].pase;\nnumero++;\ncamino=3;\nmsg.topic =\"UPDATE `llegada` SET `id`='1', `turno`='\"+numero+\"', `pase`='\"+camino+\"' WHERE (id='1')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2340,
+        "y": 280,
+        "wires": [
+            [
+                "54908ecfe260efcd"
+            ]
+        ]
+    },
+    {
+        "id": "54908ecfe260efcd",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Editar dato 2",
+        "x": 2550,
+        "y": 280,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8e44f0b64b99efef",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Dato a eliminar 2",
+        "func": "var numero = msg.payload[0].turno;\nmsg.topic = \"DELETE FROM `codigo` WHERE (id='\"+numero+\"')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2370,
+        "y": 320,
+        "wires": [
+            [
+                "2f756d704eeb7ad4"
+            ]
+        ]
+    },
+    {
+        "id": "2f756d704eeb7ad4",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Eliminar 2",
+        "x": 2640,
+        "y": 320,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "246c721da68734a0",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Consulta 2",
+        "func": "var numero = msg.payload[0].turno;\nmsg.topic = \"SELECT `correo`, `user`, `code` FROM `codigo` WHERE (`id`= '\" + numero + \"') AND (`pase` = '2')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1290,
+        "y": 300,
+        "wires": [
+            [
+                "58becb55dae3754c"
+            ]
+        ]
+    },
+    {
+        "id": "21f21c9249e0ca53",
+        "type": "switch",
+        "z": "2c1321d5e1797f34",
+        "name": "switch 2",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1740,
+        "y": 300,
+        "wires": [
+            [
+                "d37c05a953162ee9",
+                "9325b781348cfde6"
+            ],
+            [
+                "9262d1215ee534e0"
+            ]
+        ]
+    },
+    {
+        "id": "9262d1215ee534e0",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Alternativo 2",
+        "func": "msg.topic = \"SELECT `pase` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1930,
+        "y": 380,
+        "wires": [
+            [
+                "9286e56b990980e6"
+            ]
+        ]
+    },
+    {
+        "id": "9286e56b990980e6",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Ruta 2",
+        "x": 2070,
+        "y": 380,
+        "wires": [
+            [
+                "0dc656e42a5b3403"
+            ]
+        ]
+    },
+    {
+        "id": "f77c35e1ac964f61",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Modificar 2",
+        "x": 2410,
+        "y": 380,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "0dc656e42a5b3403",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Proximo camino 2",
+        "func": "var camino = msg.payload[0].pase;\ncamino = 3;\nmsg.topic = \"UPDATE `llegada` SET `id`='1', `pase`='\" + camino + \"' WHERE (id='1')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2230,
+        "y": 380,
+        "wires": [
+            [
+                "f77c35e1ac964f61"
+            ]
+        ]
+    },
+    {
+        "id": "a991a68186c3a558",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Mensaje 3",
+        "func": "var consulta=new Object();\nvar correo,codigo;\nconsulta=msg.payload;\nif(msg.payload.length !=0){\n    correo=consulta[0].correo;\n    codigo=consulta[0].code;\n    msg.to=correo;\n    msg.topic=\"Recuperacion de Contraseña\"\n    msg.payload=\"Codigo: \"+codigo+\"\\n\\n\"+\n    \"Te enviamos este correo con un codigo de verificacion\\n\"+\n    \"para restaurar tu contraseña de la\\n\"+\n    \"cuenta: [Proyecto]\\n\"+\n    \"Por favor no compartas este codigo con nadie.\";\n    return msg;\n}\nmsg.payload = \"0\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1590,
+        "y": 500,
+        "wires": [
+            [
+                "a375b68ec9ff8e8f"
+            ]
+        ]
+    },
+    {
+        "id": "42265d512fa98e6f",
+        "type": "e-mail",
+        "z": "2c1321d5e1797f34",
+        "server": "smtp.gmail.com",
+        "port": "465",
+        "secure": true,
+        "tls": true,
+        "name": "",
+        "dname": "Clave Recuperacion ",
+        "x": 1960,
+        "y": 460,
+        "wires": []
+    },
+    {
+        "id": "234e544816f1b3d1",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Datos 3",
+        "x": 1440,
+        "y": 500,
+        "wires": [
+            [
+                "a991a68186c3a558"
+            ]
+        ]
+    },
+    {
+        "id": "2aae2f3a339a2ba6",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Llegada anterior 3",
+        "func": "msg.topic = \"SELECT `turno`, `pase` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1950,
+        "y": 520,
+        "wires": [
+            [
+                "1650f5a590d1d456"
+            ]
+        ]
+    },
+    {
+        "id": "c1bd8bb89166d871",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Dato a eliminar 3",
+        "func": "var numero = msg.payload[0].turno;\nmsg.topic = \"DELETE FROM `codigo` WHERE (id='\"+numero+\"')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2370,
+        "y": 520,
+        "wires": [
+            [
+                "744b63f5da70a09b"
+            ]
+        ]
+    },
+    {
+        "id": "744b63f5da70a09b",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Eliminar 3",
+        "x": 2640,
+        "y": 520,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "fc315e95f51badbe",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Consulta 3",
+        "func": "var numero = msg.payload[0].turno;\nmsg.topic = \"SELECT `correo`, `user`, `code` FROM `codigo` WHERE (`id`= '\" + numero + \"') AND (`pase` = '3')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1290,
+        "y": 500,
+        "wires": [
+            [
+                "234e544816f1b3d1"
+            ]
+        ]
+    },
+    {
+        "id": "a375b68ec9ff8e8f",
+        "type": "switch",
+        "z": "2c1321d5e1797f34",
+        "name": "switch 3",
+        "property": "payload",
+        "propertyType": "msg",
+        "rules": [
+            {
+                "t": "neq",
+                "v": "0",
+                "vt": "str"
+            },
+            {
+                "t": "eq",
+                "v": "0",
+                "vt": "str"
+            }
+        ],
+        "checkall": "true",
+        "repair": false,
+        "outputs": 2,
+        "x": 1740,
+        "y": 500,
+        "wires": [
+            [
+                "2aae2f3a339a2ba6",
+                "42265d512fa98e6f"
+            ],
+            [
+                "4a0e28c74e7fcc13"
+            ]
+        ]
+    },
+    {
+        "id": "4a0e28c74e7fcc13",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Alternativo 3",
+        "func": "msg.topic = \"SELECT `pase` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 1930,
+        "y": 580,
+        "wires": [
+            [
+                "63fe07e41da689d4"
+            ]
+        ]
+    },
+    {
+        "id": "63fe07e41da689d4",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Ruta 3",
+        "x": 2070,
+        "y": 580,
+        "wires": [
+            [
+                "1521c8e062fba109"
+            ]
+        ]
+    },
+    {
+        "id": "58cfe5e9da97b2a6",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Modificar 3",
+        "x": 2410,
+        "y": 580,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "1521c8e062fba109",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Proximo camino 3",
+        "func": "var camino = msg.payload[0].pase;\ncamino = 1;\nmsg.topic = \"UPDATE `llegada` SET `id`='1', `pase`='\" + camino + \"' WHERE (id='1')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2230,
+        "y": 580,
+        "wires": [
+            [
+                "58cfe5e9da97b2a6"
+            ]
+        ]
+    },
+    {
+        "id": "1650f5a590d1d456",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Llegada ejecutada 3",
+        "x": 2160,
+        "y": 520,
+        "wires": [
+            [
+                "70e0a767192533a0",
+                "c1bd8bb89166d871"
+            ]
+        ]
+    },
+    {
+        "id": "70e0a767192533a0",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Editar 3",
+        "func": "var numero=msg.payload[0].turno;\nvar camino=msg.payload[0].pase;\nnumero++;\ncamino=1;\nmsg.topic =\"UPDATE `llegada` SET `id`='1', `turno`='\"+numero+\"', `pase`='\"+camino+\"' WHERE (id='1')\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 2340,
+        "y": 480,
+        "wires": [
+            [
+                "64a4f7456f2c1169"
+            ]
+        ]
+    },
+    {
+        "id": "64a4f7456f2c1169",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Editar dato 3",
+        "x": 2550,
+        "y": 480,
+        "wires": [
+            []
+        ]
+    },
+    {
+        "id": "8f986657f485917d",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Turno G",
+        "func": "msg.topic =\"SELECT `turno` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 100,
+        "wires": [
+            [
+                "43d59ccd8db1049d"
+            ]
+        ]
+    },
+    {
+        "id": "43d59ccd8db1049d",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Llegada G",
+        "x": 1130,
+        "y": 100,
+        "wires": [
+            [
+                "fad73743cd932782"
+            ]
+        ]
+    },
+    {
+        "id": "769309135910183b",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Turno G 2",
+        "func": "msg.topic =\"SELECT `turno` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 300,
+        "wires": [
+            [
+                "50df6898a0131223"
+            ]
+        ]
+    },
+    {
+        "id": "50df6898a0131223",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Llegada G 2",
+        "x": 1130,
+        "y": 300,
+        "wires": [
+            [
+                "246c721da68734a0"
+            ]
+        ]
+    },
+    {
+        "id": "e41cbf9810c0aa6f",
+        "type": "function",
+        "z": "2c1321d5e1797f34",
+        "name": "Turno G 3",
+        "func": "msg.topic =\"SELECT `turno` FROM `llegada`\";\nreturn msg;",
+        "outputs": 1,
+        "noerr": 0,
+        "initialize": "",
+        "finalize": "",
+        "libs": [],
+        "x": 980,
+        "y": 500,
+        "wires": [
+            [
+                "fe78a12a9d9b91b7"
+            ]
+        ]
+    },
+    {
+        "id": "fe78a12a9d9b91b7",
+        "type": "mysql",
+        "z": "2c1321d5e1797f34",
+        "mydb": "d1c26229bc1f3c7f",
+        "name": "Llegada G 3",
+        "x": 1130,
+        "y": 500,
+        "wires": [
+            [
+                "fc315e95f51badbe"
+            ]
+        ]
+    },
+    {
+        "id": "d1c26229bc1f3c7f",
+        "type": "MySQLdatabase",
+        "name": "",
+        "host": "localhost",
+        "port": "3306",
+        "db": "usuario",
+        "tz": "",
+        "charset": "UTF8"
+    }
+]
