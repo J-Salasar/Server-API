@@ -1,0 +1,39 @@
+<?php
+    $hostname="localhost";
+    $database="usuario";
+    $username="root";
+    $password="";
+    $json=array();
+    if(isset($_POST["usuario"]) && isset($_POST["clave"])){
+        $user=$_POST["usuario"];
+        $clave=$_POST["clave"];
+        $user1;
+        $clave1;
+        $estado1;
+        $rango;
+        $conexion=mysqli_connect($hostname,$username,$password,$database);
+        $consulta="SELECT * FROM `cuentas` WHERE (`user`='$user') AND (`password`='$clave')";
+        $resultado=mysqli_query($conexion,$consulta);
+        if($registro=mysqli_fetch_array($resultado)){
+            $estado=$registro["estado"];
+            $user1=$registro["user"];
+            $clave1=$registro["password"];
+            $rango=$registro["rango"];
+            if(($user==$user1)&&($clave==$clave1)){
+                $estado1="aprobado";
+            }
+            else{
+                $estado1="denegado";
+            }
+        }
+        else{
+            $estado1="denegado";
+        }
+        $resultar["rango"]=$rango;
+        $resultar["validar"]=$estado1;
+        $resultar["estado"]=$estado;
+        $json['usuario'][]=$resultar;
+        echo json_encode($json);
+        mysqli_close($conexion);
+    }
+?>
